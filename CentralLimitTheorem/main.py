@@ -1,3 +1,6 @@
+import math
+from pytools import average
+
 def random_sample(n, a=0, b=9):
     from random import randint
     return [ randint(a, b) for _ in range(n) ]
@@ -15,24 +18,43 @@ def distribution(sample):
         freq[i - begin] += 1
     return freq
 
-samples = [
-    random_sample(10000) for _ in range(10)
-]
+def limitTheorem(num):
+    samples = [
+        random_sample(num) for _ in range(100)
+    ]
 
-sample_sum = [0] * len(samples[0])
-for sample in samples:
-    sample_sum = sum_samples(sample_sum, sample)
+    sample_sum = [0] * len(samples[0])
+    for sample in samples:
+        sample_sum = sum_samples(sample_sum, sample)
 
-#print("Samples:")
-#for sample in samples:
-#    print(sample)
-#print("="*30)
-#print("Sample Sum:")
-#print(sample_sum)
+    return distribution(sample_sum)
 
-from matplotlib import pyplot as plt
+def testOne():
+    from matplotlib import pyplot as plt
 
-#plt.hist(sample_sum)
-#plt.stairs(distribution(sample_sum), fill=True)
-plt.plot(distribution(sample_sum))
-plt.show()
+    fig, axs = plt.subplots(5, 5)
+    plt.subplots_adjust(hspace=3)
+
+    for i in range(5):
+        for j in range(5):
+            num = 100 * (i * 5 + j + 1)
+            axs[i][j].set_title(num)
+            axs[i][j].plot(limitTheorem(num))
+
+    plt.show()
+
+def testTwo():
+    samples = [
+        random_sample(100) for _ in range(1000)
+    ]
+    
+    average_sample = [ average(sample) for sample in samples]  
+
+    mean = average(average_sample)
+    SE = math.sqrt(sum([(mean - n)**2 for n in average_sample]) / (len(average_sample) - 1))
+
+    print("mean average sample:", mean)
+    print("SE:" , SE)
+
+testTwo()
+testOne()
