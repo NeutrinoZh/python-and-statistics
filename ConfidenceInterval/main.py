@@ -22,4 +22,4 @@ sd = math_sd(sample, mean)
 se = sd / math.sqrt(len(sample))
 interval = ( mean - 1.96 * se, mean + 1.96 * se )
 
-print(interval)
+print("95% ConfidenceInterval:", interval)
